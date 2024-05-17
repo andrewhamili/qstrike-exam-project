@@ -4,6 +4,7 @@ import { IFormData, Task, TaskStatus } from "../../App";
 import task from "../../task";
 import { useProxy } from "valtio/utils";
 import { useSnapshot } from "valtio";
+import { Tab, Table } from "react-bootstrap";
 
 interface Props {}
 
@@ -11,7 +12,7 @@ const DailyTask: React.FC<Props> = (props) => {
   const snapshot = useProxy(task);
 
   return (
-    <table border={1}>
+    <Table bordered striped hover>
       {snapshot.tasks.length > 0 ? (
         <>
           <thead>
@@ -28,7 +29,7 @@ const DailyTask: React.FC<Props> = (props) => {
                 <td>{task.name}</td>
                 <td>{task.description}</td>
                 <td>{task.status}</td>
-                <td>{new Date(task.dueDate).toDateString()}</td>
+                <td>{new Date(task.dueDate).toLocaleDateString()}</td>
                 <td>
                   <input type="checkbox" defaultChecked={task.isArchived} />
                 </td>
@@ -39,7 +40,7 @@ const DailyTask: React.FC<Props> = (props) => {
       ) : (
         <></>
       )}
-    </table>
+    </Table>
   );
 };
 export default DailyTask;
