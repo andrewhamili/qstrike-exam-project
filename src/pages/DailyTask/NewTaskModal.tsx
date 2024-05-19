@@ -90,6 +90,7 @@ const NewTaskModal: React.FC<Props> = (props) => {
           </FormGroup>
           <FormGroup className="mb-2">
             <Form.Check
+              label="Archived?"
               name="isArchived"
               id="isArchived"
               onChange={formik.handleChange}
