@@ -23,7 +23,6 @@ const FilterModal: React.FC<Props> = (props) => {
       isArchived: false,
     },
     onSubmit: (values) => {
-      console.log(values);
       props.setFilter(values);
     },
   });

@@ -58,14 +58,11 @@ const DailyTask: React.FC<Props> = (props) => {
         : sortedAndFiltered;
     setData(sortedAndFiltered);
 
-    console.log("setData");
-
     return sortedAndFiltered;
   };
 
   React.useEffect(() => {
     sortedAndFiltered();
-    console.log("here");
   }, [filter]);
 
   return (

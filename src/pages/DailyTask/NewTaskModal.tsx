@@ -13,31 +13,6 @@ export interface IFormData {
 }
 
 const NewTaskModal: React.FC<Props> = (props) => {
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData: IFormData = {};
-    const data = new FormData(form as HTMLFormElement);
-    for (var key of data.keys()) {
-      formData[key] = data.get(key);
-    }
-    if (Object.values(TaskStatus).includes(formData.status)) {
-      const payload: Task = {
-        id: 0,
-        name: formData.name,
-        description: formData.description,
-        status: formData.status,
-        isArchived: false,
-        dueDate: new Date(formData.dueDate),
-      };
-      console.log(payload);
-      //return;
-      task.newTask = payload;
-      task.addTask();
-    } else {
-      alert("error");
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
