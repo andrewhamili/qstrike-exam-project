@@ -19,12 +19,14 @@ interface Store {
   tasks: Task[];
   newTask: Task;
   addTask: () => void;
+  taskStatusFilter: TaskStatus | null;
+  taskArchiveFilter: boolean | null;
 }
 
 export const addTask = (tasks: Task[], task: Task): Task[] => [
   ...tasks,
   {
-    id: tasks.length > 1 ? tasks[tasks.length - 1].id + 1 : 1,
+    id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
     name: task.name,
     description: task.description,
     status: task.status,
@@ -46,6 +48,8 @@ const task = proxy<Store>({
   addTask() {
     task.tasks = addTask(task.tasks, task.newTask);
   },
+  taskStatusFilter: null,
+  taskArchiveFilter: null
 });
 
 export default task;
