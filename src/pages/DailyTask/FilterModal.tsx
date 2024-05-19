@@ -24,6 +24,7 @@ const FilterModal: React.FC<Props> = (props) => {
     },
     onSubmit: (values) => {
       props.setFilter(values);
+      props.onHide();
     },
   });
 
@@ -66,7 +67,10 @@ const FilterModal: React.FC<Props> = (props) => {
           </FormGroup>
           <FormGroup>
             <Button type="submit">Filter</Button>
-            <Button onClick={() => props.setFilter(defaultFilter)} variant="danger">
+            <Button
+              onClick={() => props.setFilter(defaultFilter)}
+              variant="danger"
+            >
               Reset
             </Button>
           </FormGroup>
