@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, FloatingLabel, Form, FormGroup, Modal } from "react-bootstrap";
 import task, { Task, TaskStatus } from "../../task";
+import { useFormik } from "formik";
 
 interface Props {
   show: boolean;
@@ -29,12 +30,28 @@ const NewTaskModal: React.FC<Props> = (props) => {
         isArchived: false,
         dueDate: new Date(formData.dueDate),
       };
+      console.log(payload);
+      //return;
       task.newTask = payload;
       task.addTask();
-    }else{
-        alert('error');
+    } else {
+      alert("error");
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+      status: TaskStatus.TODO,
+      dueDate: new Date(),
+      isArchived: false,
+    },
+    onSubmit: (values) => {
+      task.newTask = {...values, id: 0}
+      task.addTask()
+    },
+  });
 
   return (
     <Modal show={props.show} onHide={props.onHide}>
@@ -42,21 +59,40 @@ const NewTaskModal: React.FC<Props> = (props) => {
         <Modal.Title>New task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={(e) => handleFormSubmit(e)}>
+        <Form onSubmit={formik.handleSubmit}>
           <FormGroup className="mb-2">
             <FloatingLabel label="Name">
-              <Form.Control type="text" name="name" />
+              <Form.Control
+                required
+                type="text"
+                id="name"
+                name="name"
+                onChange={formik.handleChange}
+              />
             </FloatingLabel>
           </FormGroup>
           <FormGroup className="mb-2">
             <FloatingLabel label="Description">
-              <Form.Control type="text" name="description" />
+              <Form.Control
+                required
+                type="text"
+                id="description"
+                name="description"
+                onChange={formik.handleChange}
+              />
             </FloatingLabel>
           </FormGroup>
           <FormGroup className="mb-2">
             <FloatingLabel label="Status">
-              <Form.Select name="status">
-                <option hidden>==SELECT==</option>
+              <Form.Select
+                required
+                name="status"
+                id="status"
+                onChange={formik.handleChange}
+              >
+                <option hidden value={""}>
+                  ==SELECT==
+                </option>
                 {Object.values(TaskStatus).map((ts, idx) => {
                   return (
                     <option key={idx} value={ts}>
@@ -69,8 +105,21 @@ const NewTaskModal: React.FC<Props> = (props) => {
           </FormGroup>
           <FormGroup className="mb-2">
             <FloatingLabel label="Due date">
-              <Form.Control type="date" name="dueDate" />
+              <Form.Control
+                required
+                type="date"
+                name="dueDate"
+                id="dueDate"
+                onChange={formik.handleChange}
+              />
             </FloatingLabel>
+          </FormGroup>
+          <FormGroup className="mb-2">
+            <Form.Check
+              name="isArchived"
+              id="isArchived"
+              onChange={formik.handleChange}
+            />
           </FormGroup>
           <FormGroup>
             <Button type="submit" className="form-control">

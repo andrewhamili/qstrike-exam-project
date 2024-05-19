@@ -19,8 +19,6 @@ interface Store {
   tasks: Task[];
   newTask: Task;
   addTask: () => void;
-  taskStatusFilter: TaskStatus | null;
-  taskArchiveFilter: boolean | null;
 }
 
 export const addTask = (tasks: Task[], task: Task): Task[] => [
@@ -48,8 +46,6 @@ const task = proxy<Store>({
   addTask() {
     task.tasks = addTask(task.tasks, task.newTask);
   },
-  taskStatusFilter: null,
-  taskArchiveFilter: null
 });
 
 export default task;
