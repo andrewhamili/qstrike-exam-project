@@ -28,7 +28,7 @@ export interface FilterObject {
 export const defaultFilter = {
   taskStatus: null,
   name: "",
-  isArchived: false,
+  isArchived: null,
 };
 
 const DailyTask: React.FC<Props> = (props) => {
@@ -58,12 +58,29 @@ const DailyTask: React.FC<Props> = (props) => {
         : sortedAndFiltered;
     setData(sortedAndFiltered);
 
+    console.log("sortedAndFiltered");
+
     return sortedAndFiltered;
+  };
+
+  const updateArchive = (index: number, selectedTask: Task) => {
+    if (
+      window.confirm(
+        `Sure to ${selectedTask.isArchived ? "unarchive" : "archive"} task #${
+          selectedTask.id
+        }?`
+      )
+    ) {
+      const payload = { ...selectedTask, isArchived: !selectedTask.isArchived };
+      const tasks = [...snapshot.tasks];
+      tasks[index] = payload;
+      task.tasks = tasks;
+    }
   };
 
   React.useEffect(() => {
     sortedAndFiltered();
-  }, [filter]);
+  }, [filter, snapshot.tasks]);
 
   return (
     <>
@@ -95,7 +112,21 @@ const DailyTask: React.FC<Props> = (props) => {
               {data.map((task, idx) => (
                 <tr key={idx}>
                   <td>
-                    <Badge>Archive</Badge>
+                    {task.isArchived ? (
+                      <Badge
+                        bg={"danger"}
+                        onClick={() => updateArchive(idx, task)}
+                      >
+                        Unarchive
+                      </Badge>
+                    ) : (
+                      <Badge
+                        bg="primary"
+                        onClick={() => updateArchive(idx, task)}
+                      >
+                        Archive
+                      </Badge>
+                    )}
                   </td>
                   <td>{task.id}</td>
                   <td>{task.name}</td>

@@ -13,7 +13,6 @@ export interface IFormData {
 }
 
 const NewTaskModal: React.FC<Props> = (props) => {
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -23,8 +22,8 @@ const NewTaskModal: React.FC<Props> = (props) => {
       isArchived: false,
     },
     onSubmit: (values) => {
-      task.newTask = {...values, id: 0}
-      task.addTask()
+      task.newTask = { ...values, id: 0 };
+      task.addTask();
     },
   });
 
