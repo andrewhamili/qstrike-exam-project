@@ -75,6 +75,7 @@ const DailyTask: React.FC<Props> = (props) => {
       const tasks = [...snapshot.tasks];
       tasks[index] = payload;
       task.tasks = tasks;
+      sortedAndFiltered();
     }
   };
 
@@ -98,7 +99,7 @@ const DailyTask: React.FC<Props> = (props) => {
         <Button onClick={() => setShowNewTaskModal(true)}>New</Button>
       </span>
       <Table bordered striped hover>
-        {data.length > 0 ? (
+        {data.length > 0 && (
           <>
             <thead>
               <tr>
@@ -138,10 +139,9 @@ const DailyTask: React.FC<Props> = (props) => {
               ))}
             </tbody>
           </>
-        ) : (
-          <></>
         )}
       </Table>
+      <p>{`${data.length} of ${snapshot.tasks.length} tasks shown`}</p>
     </>
   );
 };

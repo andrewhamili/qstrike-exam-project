@@ -24,6 +24,7 @@ const NewTaskModal: React.FC<Props> = (props) => {
     onSubmit: (values) => {
       task.newTask = { ...values, id: 0 };
       task.addTask();
+      props.onHide();
     },
   });
 
