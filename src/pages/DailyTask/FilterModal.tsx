@@ -20,7 +20,8 @@ const FilterModal: React.FC<Props> = (props) => {
     initialValues: {
       taskStatus: null,
       name: "",
-      isArchived: false,
+      description: "",
+      isArchived: null,
     },
     onSubmit: (values) => {
       props.setFilter(values);
@@ -40,6 +41,15 @@ const FilterModal: React.FC<Props> = (props) => {
               <Form.Control
                 type="text"
                 name="name"
+                onChange={formik.handleChange}
+              />
+            </FloatingLabel>
+          </FormGroup>
+          <FormGroup className="mb-2">
+            <FloatingLabel label="Description">
+              <Form.Control
+                type="text"
+                name="description"
                 onChange={formik.handleChange}
               />
             </FloatingLabel>

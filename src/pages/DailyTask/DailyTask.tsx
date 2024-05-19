@@ -22,12 +22,14 @@ interface Props {}
 export interface FilterObject {
   taskStatus: TaskStatus | null;
   name: string;
+  description: string;
   isArchived: boolean | null;
 }
 
 export const defaultFilter = {
   taskStatus: null,
   name: "",
+  description: "",
   isArchived: null,
 };
 
@@ -40,6 +42,7 @@ const DailyTask: React.FC<Props> = (props) => {
   const [data, setData] = React.useState<Task[]>([]);
 
   const sortedAndFiltered = () => {
+    console.log(filter);
     let sortedAndFiltered = [...snapshot.tasks].sort(
       (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
     );
@@ -47,8 +50,10 @@ const DailyTask: React.FC<Props> = (props) => {
       filter.taskStatus !== null
         ? sortedAndFiltered.filter((obj) => obj.status === filter.taskStatus)
         : sortedAndFiltered;
-    sortedAndFiltered = sortedAndFiltered.filter((obj) =>
-      obj.name.includes(filter.name)
+    sortedAndFiltered = sortedAndFiltered.filter(
+      (obj) =>
+        obj.name.toLowerCase().includes(filter.name) &&
+        obj.description.toLowerCase().includes(filter.description)
     );
     sortedAndFiltered =
       filter.isArchived !== null
@@ -57,8 +62,6 @@ const DailyTask: React.FC<Props> = (props) => {
           )
         : sortedAndFiltered;
     setData(sortedAndFiltered);
-
-    console.log("sortedAndFiltered");
 
     return sortedAndFiltered;
   };
