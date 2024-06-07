@@ -1,4 +1,4 @@
-import { proxy } from "valtio";
+import { proxy, useSnapshot } from "valtio";
 
 export enum TaskStatus {
   TODO = "To-Do",
@@ -15,37 +15,16 @@ export interface Task {
   isArchived: boolean;
 }
 
-interface Store {
-  tasks: Task[];
-  newTask: Task;
-  addTask: () => void;
-}
+export const taskStore = proxy<Task[]>([]);
+export const useTask = () => useSnapshot(taskStore);
 
-export const addTask = (tasks: Task[], task: Task): Task[] => [
-  ...tasks,
-  {
-    id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
-    name: task.name,
-    description: task.description,
-    status: task.status,
-    dueDate: task.dueDate,
-    isArchived: task.isArchived,
-  },
-];
-
-const task = proxy<Store>({
-  tasks: [],
-  newTask: {
-    id: 0,
-    description: "",
-    dueDate: new Date(),
-    isArchived: false,
-    name: "",
-    status: TaskStatus.DONE,
-  },
-  addTask() {
-    task.tasks = addTask(task.tasks, task.newTask);
-  },
-});
-
-export default task;
+export const addTask = (t: Task) => {
+  console.info("add", t);
+  taskStore.push(t);
+};
+export const archiveTask = (index: number) => {
+  const currentTasks = [...taskStore];
+  const task = currentTasks[index];
+  task.isArchived = true;
+  taskStore[index] = task;
+};

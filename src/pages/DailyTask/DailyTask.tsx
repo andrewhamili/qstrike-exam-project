@@ -1,7 +1,7 @@
 import React from "react";
 import { IFormData } from "../../App";
 
-import task, { Task, TaskStatus } from "../../task";
+import { useTask, addTask, archiveTask, Task, TaskStatus } from "../../task";
 import { useProxy } from "valtio/utils";
 import { useSnapshot } from "valtio";
 import {
@@ -34,7 +34,7 @@ export const defaultFilter = {
 };
 
 const DailyTask: React.FC<Props> = (props) => {
-  const snapshot = useProxy(task);
+  const taskStore = useTask();
 
   const [filter, setFilter] = React.useState<FilterObject>(defaultFilter);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
@@ -43,7 +43,7 @@ const DailyTask: React.FC<Props> = (props) => {
 
   const sortedAndFiltered = () => {
     console.log(filter);
-    let sortedAndFiltered = [...snapshot.tasks].sort(
+    let sortedAndFiltered = taskStore.toSorted(
       (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
     );
     sortedAndFiltered =
@@ -66,25 +66,9 @@ const DailyTask: React.FC<Props> = (props) => {
     return sortedAndFiltered;
   };
 
-  const updateArchive = (index: number, selectedTask: Task) => {
-    if (
-      window.confirm(
-        `Sure to ${selectedTask.isArchived ? "unarchive" : "archive"} task #${
-          selectedTask.id
-        }?`
-      )
-    ) {
-      const payload = { ...selectedTask, isArchived: !selectedTask.isArchived };
-      const tasks = [...snapshot.tasks];
-      tasks[index] = payload;
-      task.tasks = tasks;
-      sortedAndFiltered();
-    }
-  };
-
   React.useEffect(() => {
     sortedAndFiltered();
-  }, [filter, snapshot.tasks]);
+  }, [filter, taskStore]);
 
   return (
     <>
@@ -117,17 +101,11 @@ const DailyTask: React.FC<Props> = (props) => {
                 <tr key={idx}>
                   <td>
                     {task.isArchived ? (
-                      <Badge
-                        bg={"danger"}
-                        onClick={() => updateArchive(idx, task)}
-                      >
+                      <Badge bg={"danger"} onClick={() => archiveTask(idx)}>
                         Unarchive
                       </Badge>
                     ) : (
-                      <Badge
-                        bg="primary"
-                        onClick={() => updateArchive(idx, task)}
-                      >
+                      <Badge bg="primary" onClick={() => archiveTask(idx)}>
                         Archive
                       </Badge>
                     )}
@@ -144,7 +122,7 @@ const DailyTask: React.FC<Props> = (props) => {
           </>
         )}
       </Table>
-      <p>{`${data.length} of ${snapshot.tasks.length} tasks shown`}</p>
+      <p>{`${data.length} of ${taskStore.length} tasks shown`}</p>
     </>
   );
 };
