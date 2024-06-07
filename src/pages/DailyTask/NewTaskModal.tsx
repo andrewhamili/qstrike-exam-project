@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, FloatingLabel, Form, FormGroup, Modal } from "react-bootstrap";
-import task, { Task, TaskStatus } from "../../task";
+import { TaskStatus, useTask, addTask } from "../../task";
 import { useFormik } from "formik";
 
 interface Props {
@@ -22,8 +22,7 @@ const NewTaskModal: React.FC<Props> = (props) => {
       isArchived: false,
     },
     onSubmit: (values) => {
-      task.newTask = { ...values, id: 0 };
-      task.addTask();
+      addTask({ ...values, id: 0 });
       props.onHide();
     },
   });
