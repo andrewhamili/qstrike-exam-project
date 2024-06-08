@@ -1,17 +1,10 @@
 import React from "react";
 import { IFormData } from "../../App";
 
-import { useTask, addTask, archiveTask, Task, TaskStatus } from "../../task";
-import { useProxy } from "valtio/utils";
-import { useSnapshot } from "valtio";
+import { store, useStore, Task, TaskStatus } from "./../../store";
 import {
   Badge,
   Button,
-  FloatingLabel,
-  Form,
-  FormGroup,
-  Modal,
-  Tab,
   Table,
 } from "react-bootstrap";
 import FilterModal from "./FilterModal";
@@ -34,16 +27,25 @@ export const defaultFilter = {
 };
 
 const DailyTask: React.FC<Props> = (props) => {
-  const taskStore = useTask();
+  let snap = useStore();
 
   const [filter, setFilter] = React.useState<FilterObject>(defaultFilter);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = React.useState(false);
   const [data, setData] = React.useState<Task[]>([]);
+  const archiveTask = (index: number) => {
+    let currentTasks = snap.tasks;
+
+    store.tasks = currentTasks.map((task, idx) => {
+      let t = { ...task };
+      if (idx === index) t.isArchived = !t.isArchived;
+      return t;
+    });
+  };
 
   const sortedAndFiltered = () => {
     console.log(filter);
-    let sortedAndFiltered = taskStore.toSorted(
+    let sortedAndFiltered = snap.tasks.toSorted(
       (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
     );
     sortedAndFiltered =
@@ -68,7 +70,7 @@ const DailyTask: React.FC<Props> = (props) => {
 
   React.useEffect(() => {
     sortedAndFiltered();
-  }, [filter, taskStore]);
+  }, [filter, snap]);
 
   return (
     <>
@@ -122,7 +124,7 @@ const DailyTask: React.FC<Props> = (props) => {
           </>
         )}
       </Table>
-      <p>{`${data.length} of ${taskStore.length} tasks shown`}</p>
+      <p>{`${data.length} of ${snap.tasks.length} tasks shown`}</p>
     </>
   );
 };

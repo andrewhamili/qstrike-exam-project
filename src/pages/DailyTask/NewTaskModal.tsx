@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, FloatingLabel, Form, FormGroup, Modal } from "react-bootstrap";
-import { TaskStatus, useTask, addTask } from "../../task";
+import { store, Task, TaskStatus, useStore } from "../../store"
 import { useFormik } from "formik";
 
 interface Props {
@@ -13,6 +13,12 @@ export interface IFormData {
 }
 
 const NewTaskModal: React.FC<Props> = (props) => {
+  let snap = useStore();
+
+  const addTask = (t: Task) => {
+    store.tasks.push(t);
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
