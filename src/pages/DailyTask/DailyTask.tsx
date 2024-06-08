@@ -1,17 +1,10 @@
 import React from "react";
 import { IFormData } from "../../App";
 
-import { store, useStore, Task, TaskStatus } from "../../task";
-import { useProxy } from "valtio/utils";
-import { useSnapshot } from "valtio";
+import { store, useStore, Task, TaskStatus } from "./../../store";
 import {
   Badge,
   Button,
-  FloatingLabel,
-  Form,
-  FormGroup,
-  Modal,
-  Tab,
   Table,
 } from "react-bootstrap";
 import FilterModal from "./FilterModal";

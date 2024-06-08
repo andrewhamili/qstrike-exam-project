@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, FloatingLabel, Form, FormGroup, Modal } from "react-bootstrap";
-import { Task, TaskStatus, useStore, store } from "../../task";
+import { store, Task, TaskStatus, useStore } from "../../store"
 import { useFormik } from "formik";
 
 interface Props {

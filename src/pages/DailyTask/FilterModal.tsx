@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, FloatingLabel, Form, FormGroup, Modal } from "react-bootstrap";
 import { snapshot } from "valtio";
-import { Task, TaskStatus } from "../../task";
 import { useFormik } from "formik";
 import { defaultFilter, FilterObject } from "./DailyTask";
+import { TaskStatus } from "../../store";
 
 interface Props {
   showFilterModal: boolean;
